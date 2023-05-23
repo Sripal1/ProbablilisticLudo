@@ -45,3 +45,27 @@ for i in range(40,40+51):
     pathR.append(i%52) if i%52 != 0 else pathR.append(52)
 pathR += [r for r in homeRuns["R"]] + [finishLines["R"]]
 print(pathR)
+
+notInRedPath = []
+for element in board:
+    if element not in pathR:
+        notInRedPath.append(element)
+print("Not in Red's path:" + str(notInRedPath))
+
+notInBluePath = []
+for element in board:
+    if element not in pathB:
+        notInBluePath.append(element)
+print("Not in Blue's path:" + str(notInBluePath))
+
+notInGreenPath = []
+for element in board:
+    if element not in pathG:
+        notInGreenPath.append(element)
+print("Not in Green's path:" + str(notInGreenPath))
+
+notInYellowPath = []
+for element in board:
+    if element not in pathY:
+        notInYellowPath.append(element)
+print("Not in Yellow's path:" + str(notInYellowPath))
