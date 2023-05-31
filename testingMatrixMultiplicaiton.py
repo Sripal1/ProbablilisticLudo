@@ -1,5 +1,6 @@
 import numpy as np
 from numpy import linalg
+import os
 
 # # Create a 2x2 matrix
 # A = numpy.matrix([[1, 2], [3, 4]])
@@ -36,6 +37,19 @@ from numpy import linalg
 # print(product)
 # print("\n\n")
 
-matrix = np.zeros((76,76))
-np.set_printoptions(threshold=np.inf)  # set print options to display all elements of matrix
-print(matrix)
+# matrix = np.zeros((76,76))
+# np.set_printoptions(threshold=np.inf)  # set print options to display all elements of matrix
+# print(matrix)
+
+folder_name = "resultMatrices"
+matrixA = np.load(os.path.join(folder_name,"green_result_matrix.npy"))
+# matrixA = np.load("green_result_matrix.npy")
+
+matrixB = np.full((81, 81), 2)
+# print(matrixB)
+
+# Adjusting printing options to display the full matrix
+np.set_printoptions(threshold=np.inf)
+
+result = np.dot(matrixA, matrixB)
+print(result)
