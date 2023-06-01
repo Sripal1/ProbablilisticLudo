@@ -1,6 +1,9 @@
 import numpy as np
 from numpy import linalg
 import os
+import openpyxl
+import pandas as pd
+import subprocess
 
 # # Create a 2x2 matrix
 # A = numpy.matrix([[1, 2], [3, 4]])
@@ -41,15 +44,28 @@ import os
 # np.set_printoptions(threshold=np.inf)  # set print options to display all elements of matrix
 # print(matrix)
 
-folder_name = "resultMatrices"
-matrixA = np.load(os.path.join(folder_name,"green_result_matrix.npy"))
-# matrixA = np.load("green_result_matrix.npy")
-
-matrixB = np.full((81, 81), 2)
-# print(matrixB)
-
 # Adjusting printing options to display the full matrix
 np.set_printoptions(threshold=np.inf)
 
+# matrixA = np.load("green_result_matrix.npy")
+folder_name = "resultMatrices"
+matrixA = np.load(os.path.join(folder_name,"green_result_matrix.npy"))
+# print(matrixA)
+dfA = pd.DataFrame(matrixA)
+outputA_file = 'outputA.xlsx'
+dfA.to_excel(outputA_file,index = False)
+
+matrixB = np.full((81, 1), 2)
+# print(matrixB)
+
 result = np.dot(matrixA, matrixB)
-print(result)
+# print(result)
+# np.savetxt("matrixMultiplyTest1.csv", result, delimiter=",")
+
+df = pd.DataFrame(result)
+output_file = 'output.xlsx'
+df.to_excel(output_file, index=False)
+subprocess.call(['open', outputA_file])
+subprocess.call(['open', output_file])
+# Open the Excel file
+excel_file = openpyxl.load_workbook(output_file)
