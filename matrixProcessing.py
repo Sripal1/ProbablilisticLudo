@@ -15,6 +15,8 @@ def getMatrix(color):
         file_path = os.path.join(folder_name, "Red Ludo Matrix 2.xlsx")
     elif color == ("Green") or ("green"):
         file_path = os.path.join(folder_name, "Green Ludo Matrix-2.xlsx")
+    else:
+        print(f"{color} not a valid color name. Retry!")
     
     data_frame = pd.read_excel(file_path)
     matrixA = data_frame.to_numpy()
@@ -29,5 +31,4 @@ def getMatrix(color):
 
     return finalArr
 
-arr1 = getMatrix("yellow")
-print(arr1)
+print(getMatrix("yellow"))

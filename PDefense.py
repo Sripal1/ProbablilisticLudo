@@ -1,7 +1,10 @@
+import initiallization
+import matrixProcessing
+
 '''CALCULATING Pd'''
 
-def getotherColorProbVector(positionIdx):
-    column = [row[positionIdx+4] for row in finalArr]
+def getotherColorProbVector(positionIdx,probMatrix):
+    column = [row[positionIdx+4] for row in probMatrix]
     print(f"Other color probability vector : {column[:len(column)-4]}")
     return column[:len(column)-4]
 
@@ -31,7 +34,7 @@ def checkIntersection(greenPosVec,otherClrProbVec):
     if otherClrProbVec[currentGreenPosition] != 0:
         print(f"Likelihood of green captured: {PgreenCaptured*100}%")
 
-checkIntersection(getGreenPosVector(7),getotherColorProbVector(6))
+checkIntersection(getGreenPosVector(7),getotherColorProbVector(6,matrixProcessing.getMatrix("green")))
 
 # Create a list, Pd-green, of the likelihood of green being captured by each of the other colors [y1,y2,y3,y4,b1,b2,b3,b4,r1,r2,r3,r4]
 # Sum by color, and summ all values
