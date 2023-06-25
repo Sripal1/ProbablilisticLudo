@@ -7,13 +7,13 @@ import math
 
 def getMatrix(color):
     folder_name = "resultMatrices"
-    if color == ("Yellow") or ("yellow"):
+    if color == "Yellow" or color == "yellow":
         file_path = os.path.join(folder_name, "Yellow Ludo Matrix 2.xlsx")
-    elif color == ("Blue") or ("blue"):
+    elif color == "Blue" or color == "blue":
         file_path = os.path.join(folder_name, "Blue Ludo Matrix 2.xlsx")
-    elif color == ("Red") or ("red"):
+    elif color == "Red" or color == "red":
         file_path = os.path.join(folder_name, "Red Ludo Matrix 2.xlsx")
-    elif color == ("Green") or ("green"):
+    elif color == "Green" or color == "green":
         file_path = os.path.join(folder_name, "Green Ludo Matrix-2.xlsx")
     else:
         print(f"{color} not a valid color name. Retry!")
@@ -31,4 +31,4 @@ def getMatrix(color):
 
     return finalArr
 
-print(getMatrix("yellow"))
+# print(getMatrix("yellow"))
