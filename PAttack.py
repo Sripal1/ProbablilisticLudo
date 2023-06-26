@@ -2,6 +2,8 @@ import matrixProcessing
 import PDefense
 import coinPositions
 import time
+import numpy as np
+import copy
 
 def getAllPosofColor(colorName):
     """
@@ -30,7 +32,7 @@ def getAllPosofColor(colorName):
 
 # print(getAllPosofColor("yellow"))
 
-def getCoinPosVector(allPositionsOfColor):
+def getAllCoinPosVector(allPositionsOfColor):
     allProbVectorsOfColor = {}
     colorIdentifier = list(allPositionsOfColor.keys())[0][0]
 
@@ -47,18 +49,43 @@ def getCoinPosVector(allPositionsOfColor):
         if type(value) == int:
             allProbVectorsOfColor[key] = PDefense.getotherColorProbVector(color,value)
         else:
+            # WHAT DO I DO IF THE COIN IS STILL IN BASE?
             print("Error: Key is not an integer. Still in homebase")
-    
+        
     return allProbVectorsOfColor
 
-print(coinPositions.coinPositionsJSON)
-coinPositions.initialize_positions()
-print(coinPositions.coinPositionsJSON)
-coinPositions.updatePos("Y1",6)
-print(coinPositions.coinPositionsJSON)
-coinPositions.updatePos("Y2",5)
-print(coinPositions.coinPositionsJSON)
-coinPositions.updatePos("Y3",4)
-coinPositions.updatePos("Y4",3)
-print(getAllPosofColor("yellow"))
-print(getCoinPosVector(getAllPosofColor("yellow")))
+def getAllForecastedProbVector(allProbVectorsOfColor,allPositionsOfColor):
+    allForecastedProbVectorsOfColor = {}
+
+    currentVec = [0 for i in range(81)]
+    currentVec = np.array(currentVec)
+    for key,value in allPositionsOfColor.items():
+        currentVec += np.array(PDefense.getColorPosVector(value))
+    print("Current vector: "+str(currentVec))
+
+    for coin,pos in allPositionsOfColor.items():
+        tempCurrVector = copy.deepcopy(currentVec)
+        tempCurrVector[pos+4] = 0
+        print("Current vector: " + str(tempCurrVector))
+
+        if coin in allProbVectorsOfColor.keys():
+            currProbVector = allProbVectorsOfColor[coin]
+            print(currProbVector)
+            summedVector = tempCurrVector + currProbVector
+            allForecastedProbVectorsOfColor[coin] = summedVector
+
+    return allForecastedProbVectorsOfColor
+
+
+print(getAllForecastedProbVector(getAllCoinPosVector(getAllPosofColor("yellow")),getAllPosofColor("yellow")))
+# print(coinPositions.coinPositionsJSON)
+# coinPositions.initialize_positions()
+# print(coinPositions.coinPositionsJSON)
+# coinPositions.updatePos("Y1",6)
+# print(coinPositions.coinPositionsJSON)
+# coinPositions.updatePos("Y2",5)
+# print(coinPositions.coinPositionsJSON)
+# coinPositions.updatePos("Y3",4)
+# coinPositions.updatePos("Y4",3)
+# print(getAllPosofColor("yellow"))
+# print(getCoinPosVector(getAllPosofColor("yellow")))

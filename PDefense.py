@@ -7,17 +7,17 @@ import coinPositions
 def getotherColorProbVector(otherColor,positionIdx):
     probMatrix = matrixProcessing.getMatrix(otherColor)
     column = [row[positionIdx+4] for row in probMatrix]
-    print(f"Other color probability vector : {column[:len(column)-4]}") #Eliminating bottom 4 rows of empty values & sum
-    return column[:len(column)-4]
+    print(f"Other color probability vector : {column[:len(column)-2]}") #Eliminating last row containing column sums
+    return column[:len(column)-2]
 
-def getGreenPosVector(positionIdx):
+def getColorPosVector(positionIdx):
     vector = []
     for i in range(81):
         if i == positionIdx+4:
             vector.append(1)
         else:
             vector.append(0)
-    print(f"Green positition vector : {vector}")
+    print(f"Positition vector : {vector}")
     return vector
 
 def findGreenCoinPos(greenPosVec):
@@ -43,11 +43,11 @@ PDefenseGreen = {} # Dictionary of likelihood of green being captured by each of
 def getPDforEachColor(otherCoins,currGreenPos,coinPositions,PDefenseGreen):
     for color in otherCoins:
         if color[0] == "Y":
-            PDefenseGreen[color] = checkIntersection(getGreenPosVector(currGreenPos),getotherColorProbVector("yellow",coinPositions.coinPositions[color]))
+            PDefenseGreen[color] = checkIntersection(getColorPosVector(currGreenPos),getotherColorProbVector("yellow",coinPositions.coinPositions[color]))
         elif color[0] == "B":
-            PDefenseGreen[color] = checkIntersection(getGreenPosVector(currGreenPos),getotherColorProbVector("blue",coinPositions.coinPositions[color]))
+            PDefenseGreen[color] = checkIntersection(getColorPosVector(currGreenPos),getotherColorProbVector("blue",coinPositions.coinPositions[color]))
         elif color[0] == "R":
-            PDefenseGreen[color] = checkIntersection(getGreenPosVector(currGreenPos),getotherColorProbVector("red",coinPositions.coinPositions[color]))
+            PDefenseGreen[color] = checkIntersection(getColorPosVector(currGreenPos),getotherColorProbVector("red",coinPositions.coinPositions[color]))
 
 # print(PDefenseGreen)
 # print(checkIntersection(getGreenPosVector(9),getotherColorProbVector("yellow",9)))
