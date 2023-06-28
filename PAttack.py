@@ -30,9 +30,9 @@ def getAllPosofColor(colorName):
     
     return allPositionsOfColor
 
-# print(getAllPosofColor("yellow"))
+# print(getAllPosofColor("red"))
 
-def getAllCoinPosVector(allPositionsOfColor):
+def getAllCoinProbVector(allPositionsOfColor):
     allProbVectorsOfColor = {}
     colorIdentifier = list(allPositionsOfColor.keys())[0][0]
 
@@ -46,13 +46,16 @@ def getAllCoinPosVector(allPositionsOfColor):
         color = "green"
 
     for key,value in allPositionsOfColor.items():
-        if type(value) == int:
-            allProbVectorsOfColor[key] = PDefense.getotherColorProbVector(color,value)
-        else:
-            # WHAT DO I DO IF THE COIN IS STILL IN BASE?
-            print("Error: Key is not an integer. Still in homebase")
+        allProbVectorsOfColor[key] = PDefense.getotherColorProbVector(color,value)
+        # if type(value) == int:
+        #     allProbVectorsOfColor[key] = PDefense.getotherColorProbVector(color,value)
+        # else:
+        #     # WHAT DO I DO IF THE COIN IS STILL IN BASE?
+        #     # Index into the home base vector
+        #     print("Error: Key is not an integer. Still in homebase")
         
     return allProbVectorsOfColor
+# print(getAllCoinProbVector(getAllPosofColor("red")))
 
 def getAllForecastedProbVector(allProbVectorsOfColor,allPositionsOfColor):
     allForecastedProbVectorsOfColor = {}
@@ -61,23 +64,54 @@ def getAllForecastedProbVector(allProbVectorsOfColor,allPositionsOfColor):
     currentVec = np.array(currentVec)
     for key,value in allPositionsOfColor.items():
         currentVec += np.array(PDefense.getColorPosVector(value))
-    print("Current vector: "+str(currentVec))
+    # print("Current vector: "+str(currentVec))
 
     for coin,pos in allPositionsOfColor.items():
         tempCurrVector = copy.deepcopy(currentVec)
         tempCurrVector[pos+4] = 0
-        print("Current vector: " + str(tempCurrVector))
+        # print("Current vector: " + str(tempCurrVector))
 
         if coin in allProbVectorsOfColor.keys():
             currProbVector = allProbVectorsOfColor[coin]
-            print(currProbVector)
             summedVector = tempCurrVector + currProbVector
-            allForecastedProbVectorsOfColor[coin] = summedVector
-
+            allForecastedProbVectorsOfColor[coin] = summedVector.tolist()
+    
     return allForecastedProbVectorsOfColor
 
+# print(getAllForecastedProbVector(getAllCoinProbVector(getAllPosofColor("Yellow")),getAllPosofColor("Yellow")))
 
-print(getAllForecastedProbVector(getAllCoinPosVector(getAllPosofColor("yellow")),getAllPosofColor("yellow")))
+def PAoneColor(otherColor,currGreenPos):
+    dictOtherColor = getAllForecastedProbVector(getAllCoinProbVector(getAllPosofColor(otherColor)),getAllPosofColor(otherColor))
+    greenCoinProbVector = PDefense.getotherColorProbVector("green",currGreenPos)
+    result = {}
+    for otherColorCoin,forecastedProbVector in dictOtherColor.items():
+        # print(forecastedProbVector)
+        # print(greenCoinProbVector)
+        result[otherColorCoin] = round(np.dot(forecastedProbVector, greenCoinProbVector),5)
+        # print("RESULT" + str(result))
+    return result
+
+# print(PAoneColor("blue",12))
+
+def getAllPAttack(greenCoinPos):
+    
+    # blueDict = PAoneColor("blue",greenCoinPos)
+    # redDict = PAoneColor("red",greenCoinPos)
+    yellowDict = PAoneColor("yellow",greenCoinPos)
+    summedPAttackDict = {"Yellow":0,"Blue":0,"Red":0}
+
+    for value in yellowDict.values():
+        summedPAttackDict["Yellow"]+=value
+    # for value in blueDict.values():
+    #     summedPAttackDict["Blue"]+=value
+    # for value in redDict.values():
+    #     summedPAttackDict["Red"]+=value
+    
+    return summedPAttackDict
+
+print(getAllPAttack(12))
+
+# print(getAllForecastedProbVector(getAllCoinProbVector(getAllPosofColor("yellow")),getAllPosofColor("yellow")))
 # print(coinPositions.coinPositionsJSON)
 # coinPositions.initialize_positions()
 # print(coinPositions.coinPositionsJSON)
